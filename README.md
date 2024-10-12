@@ -7,3 +7,8 @@
 * feature/02_ejb_remote
 	- Type file: jar
 	- Explain: @Remote
+
+## EJB - "Remote" (webapp-ear-module)
+* feature/03_ejb_in_modularized
+	- Type file: ear (contains ejb, war)
+	- Explain: DataSource in Wildfly Server, @Local, @WebServlet, @Inject, JPA

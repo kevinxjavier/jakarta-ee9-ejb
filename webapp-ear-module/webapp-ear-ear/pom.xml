@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.kevinpina</groupId>
+    <artifactId>webapp-ear-ear</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>ear</packaging>
+
+    <name>app-ear</name>
+    <description>EJB Project</description>
+    <url>http://kevinpina.com</url>
+
+    <properties>
+        <maven.compiler.source>18</maven.compiler.source>
+        <maven.compiler.target>18</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <jakartaee-api.version>10.0.0</jakartaee-api.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <wildfly-maven-plugin.version>5.0.1.Final</wildfly-maven-plugin.version>
+        <maven-ear-plugin.verion>3.3.0</maven-ear-plugin.verion>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>${jakartaee-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.kevinpina</groupId>
+            <artifactId>webapp-ear-ejb</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
+            <groupId>com.kevinpina</groupId>
+            <artifactId>webapp-ear-war</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>war</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${wildfly-maven-plugin.version}</version>
+                <!-- If it is deployed locally we can omit this config -->
+                <configuration>
+                    <hostname>localhost</hostname>
+                    <port>9990</port>
+                    <username>admin</username>
+                    <password>admin</password>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>${maven-ear-plugin.verion}</version>
+                <configuration>
+                    <modules>
+                        <webModule>
+                            <groupId>com.kevinpina</groupId>
+                            <artifactId>webapp-ear-war</artifactId>
+                            <contextRoot>/webapp-ear</contextRoot><!-- By default, is deployed using the war name </artifactId> or </finalName> -->
+                            <bundleFileName>webapp-ear-war.war</bundleFileName><!-- By default, the war name will be the ${artifactId}.${version} -->
+                        </webModule>
+                        <ejbModule>
+                            <groupId>com.kevinpina</groupId>
+                            <artifactId>webapp-ear-ejb</artifactId>
+                            <bundleFileName>webapp-ear-ejb.jar</bundleFileName><!-- By default, the ejb name will be the ${artifactId}.${version} -->
+                        </ejbModule>
+                    </modules>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
